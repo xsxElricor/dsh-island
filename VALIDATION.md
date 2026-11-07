@@ -57,3 +57,11 @@
 - 宿主升级到 0.2.1-rc.5 后，0.6.0 的精确兼容声明 `@deepseek-ai/dsh: 0.2.1-rc.3` 会被宿主版本检查拒绝；兼容声明更新为 rc.5，未使用版本豁免。
 - 对照 npm 发布的 rc.3 与 rc.5：`@deepseek-ai/dsh` 的 86 个依赖只有版本号变化，Cordis 仍为 ~4.0.5；本插件读取的 `dsh-app-boot`、`dsh-agent`、`dsh-agent-loop`、`dsh-api-session-controller`、`dsh-session`、`dsh-session-projection`、`dsh-user-approval`、`dsh-user-questions`、`dsh-client-ui-settings`、`dsh-client-locale`、`dsh-deepseek-account` 等包除 package.json 外逐字节一致。运行代码只更新宿主版本的回退值。
 - `npm test` 通过。真实宿主契约（`npm run test:host`）与桌面窗口检查（`npm run test:desktop`）需在本机升级后的 Harness 上运行。
+
+## v0.6.2 适配 Harness 0.2.2-rc.1（2026-11-04）
+
+- 宿主升级到 0.2.2-rc.1 后，0.6.1 的精确兼容声明 `@deepseek-ai/dsh: 0.2.1-rc.5` 会被宿主版本检查拒绝；兼容声明更新为 0.2.2-rc.1，未使用版本豁免。
+- 这次宿主不只是改版本号：Cordis 由 4.0.5 升至 4.1.0，`@deepseek-ai/dsh` 新增 4 个依赖。对照 npm 发布的 rc.5 与 0.2.2-rc.1 逐项核对本插件用到的接口：`session/event`、`agent/assistant-stream`、`agent/status`、`agent/error`、`agent/disposed`、`approval/request`、`user-questions/request` 事件名与载荷、`agent.cancel(cause, options)`、`sessionController.prompt`、`userQuestions.answer(agent, callId, answer)`、`sessionProjections` 的 `userQuestions` 与 `contextPressure` 状态键，均保持不变。
+- `userQuestions` 的提问新增 `intent.kind = 'approval'`（只有批准/拒绝的权限决定）。灵动岛只接管没有 `intent` 的普通提问，新增类型与计划审阅一样留在 Harness 中回答，行为不变。
+- 设置页新增可选的 `settings.section.icon` 插槽，本插件未使用，沿用默认图标。
+- 运行代码只更新宿主版本的回退值。`npm test` 通过。真实宿主契约（`npm run test:host`）与桌面窗口检查（`npm run test:desktop`）需在本机升级后的 Harness 上运行。
